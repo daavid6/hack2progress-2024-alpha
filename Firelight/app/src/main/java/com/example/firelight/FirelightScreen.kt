@@ -63,7 +63,7 @@ fun FirelightApp(
 
         composable(route = FirelightScreen.Form.name) {
             FormScreen(
-                onCambiarUbicionButton = { navController.navigate(FirelightScreen.Start.name) },
+                onCambiarUbicionButton = { _, _, _ -> },
                 modifier = Modifier
                     .fillMaxSize()
             )

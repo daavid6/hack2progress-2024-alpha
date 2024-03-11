@@ -1,98 +1,104 @@
 package com.example.firelight.ui.layouts
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.firelight.R
+import com.example.firelight.ui.components.MainButton
 
 @Composable
 fun FormScreen(
-    onCambiarUbicionButton: () -> Unit,
+    onCambiarUbicionButton: (String?, String?, String?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
         color = colorResource(R.color.grisFondo),
         modifier = modifier
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
+        Column (
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
-                .padding(32.dp)
-        ) {
-
-            Spacer(
-                modifier.height(200.dp)
-            )
-
+                .padding(32.dp, 32.dp, 32.dp, 48.dp)
+        ){
             var city by remember { mutableStateOf("") }
             var latitude by remember { mutableStateOf("") }
             var longitude by remember { mutableStateOf("") }
 
-            TextField(
-                value = city,
-                onValueChange = { city = it },
-                label = { Text("Ciudad") }
-            )
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .weight(0.925F)
+            ){
 
-            TextField(
-                value = latitude,
-                onValueChange = { latitude = it },
-                label = { Text("Latitud") }
-            )
+                Spacer(modifier = Modifier.weight(0.1F))
 
-            TextField(
-                value = longitude,
-                onValueChange = { longitude = it },
-                label = { Text("Longitud") }
-            )
+                Box (
+                    modifier = Modifier.weight(0.1F)
+                ){
+                    TextField(
+                        value = city,
+                        onValueChange = { city = it },
+                        label = { Text("Ciudad") },
 
-            Spacer(
-                modifier.height(100.dp)
-            )
+                    )
+                }
 
-            Row (
-                modifier.weight(0.3F)
-            ) {
-                Button(
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.grisBotones)
-                    ),
-                    onClick = onCambiarUbicionButton,
-                    modifier = Modifier
-                        .height(60.dp)
-                        .width(300.dp)
-                ) {
+                Box (
+                    modifier = Modifier.weight(0.1F)
+                ){
                     Text(
-                        text = "Cambiar ubicacion",
+                        text = "o",
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
+                        color = colorResource(id = R.color.grisSemaforo),
+                    )
+                }
+
+                Column (
+                    verticalArrangement = Arrangement.Top,
+                    modifier = Modifier.weight(0.6F)
+                ) {
+                    TextField(
+                        value = latitude,
+                        onValueChange = { latitude = it },
+                        label = { Text("Latitud") },
+                    )
+
+                    TextField(
+                        value = longitude,
+                        onValueChange = { longitude = it },
+                        label = { Text("Longitud") }
                     )
                 }
             }
+
+
+            MainButton(
+                idButtonColor = R.color.grisBotones,
+                text = "Cambiar ubicacion",
+                onClick = { onCambiarUbicionButton(city, latitude, longitude)},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.075F)
+            )
         }
     }
 }
@@ -101,6 +107,8 @@ fun FormScreen(
 @Composable
 fun FormScreenPreview() {
     FormScreen(
-        onCambiarUbicionButton = {}
+        onCambiarUbicionButton = { _, _, _ -> },
+        modifier = Modifier
+            .fillMaxSize()
     )
 }
