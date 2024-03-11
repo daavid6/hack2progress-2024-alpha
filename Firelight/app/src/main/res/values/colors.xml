@@ -4,4 +4,6 @@
     <color name="grisSemaforo">#ff333338</color>
     <color name="grisBotones">#ff808080</color>
     <color name="rojoFondo">#FFFF7E7E</color>
+    <color name="rojoBotonEmergencia">#FF0000</color>
+    <color name="White">#FFFFFF</color>
 </resources>

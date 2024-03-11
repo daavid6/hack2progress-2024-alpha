@@ -9,14 +9,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -113,7 +108,7 @@ fun TrafficLightScreen(
             Spacer(modifier = Modifier.weight(0.5F))
 
             MainButton(
-                idColor = R.color.grisBotones,
+                idButtonColor = R.color.grisBotones,
                 text = "Cambiar ubicacion",
                 onClick = onCambiarUbicionButton,
                 modifier = Modifier
@@ -124,7 +119,6 @@ fun TrafficLightScreen(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -137,111 +131,3 @@ fun TrafficLightScreenPreview() {
             .fillMaxSize()
     )
 }
-
-
-
-
-/*
- Surface(
-        color = colorResource(R.color.grisFondo),
-        modifier = modifier
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(32.dp, 0.dp, 32.dp, 0.dp)
-
-        ) {
-
-
-            Box (
-                modifier= Modifier.weight(0.65F)
-            ){
-
-                Box(modifier = modifier
-                    .size(130.dp)
-                    .align(Alignment.TopStart)
-                    .offset(y = (40).dp)
-                ){
-                    Text(
-                        text = address,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-
-                // Icono
-                Image(
-                    painter = painterResource(id = R.drawable.firealert),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(colorResource(id = R.color.grisSemaforo)),
-                    modifier = modifier
-                        .size(50.dp)
-                        .align(Alignment.TopEnd)
-                        .offset(y = (24).dp)
-                        .clickable(onClick = onAlertButton)
-                )
-
-                //Palo
-                Image(
-                    alignment = Alignment.Center,
-                    painter = painterResource(R.drawable.palo),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(800.dp)
-                        .align(Alignment.TopCenter)
-                        .offset(y = (-100).dp)
-                )
-
-                //Semaforo
-                Image(
-                    alignment = Alignment.Center,
-                    painter = painterResource(R.drawable.semaforoon),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillHeight,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .offset(y = (100).dp)
-                )
-            }
-
-
-            Column (
-                verticalArrangement = Arrangement.Bottom,
-                modifier = Modifier
-                    .weight(0.35F)
-            ) {
-                Spacer(
-                    modifier.weight(0.55F)
-                )
-
-                Row (
-                    modifier.weight(0.3F)
-                ) {
-                    Button(
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.grisBotones)
-                        ),
-                        onClick = onCambiarUbicionButton,
-                        modifier = Modifier
-                            .height(60.dp)
-                            .width(300.dp)
-                    ) {
-                        Text(
-                            text = "Cambiar ubicacion",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                Spacer(
-                    modifier.weight(0.15F)
-                )
-            }
-        }
-    }
- */
