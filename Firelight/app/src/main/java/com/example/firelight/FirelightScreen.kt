@@ -31,12 +31,16 @@ fun FirelightApp(
     Log.d("Pruebas", "StartScreen")
     val uiState by viewModel.uiState.collectAsState()
 
+    Log.d("Pruebas", "Random")
+    viewModel.randomKnowledge()
+
     NavHost(
         navController = navController,
         startDestination = FirelightScreen.Start.name,
     ) {
         composable(route = FirelightScreen.Start.name) {
             StartScreen(
+                helpText = uiState.knowledge,
                 onLayoutButton = { navController.navigate(FirelightScreen.TrafficLight.name) },
                 modifier = Modifier
                     .fillMaxSize()

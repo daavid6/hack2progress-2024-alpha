@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Firelight</string>
+    <string name="consejo1">"Nunca arrojes colillas de cigarrillos encendidas al suelo, especialmente en áreas secas y ventosas, ya que pueden provocar incendios catastróficos."</string>
+    <string name="consejo2">"Mantén los fósforos y encendedores fuera del alcance de los niños."</string>
+    <string name="consejo3">"No dejes velas encendidas sin supervisión."</string>
+    <string name="consejo4">"Almacena productos inflamables lejos de fuentes de calor."</string>
+    <string name="consejo5">"Asegúrate de extinguir completamente cualquier fogata antes de irte de la zona."</string>
+    <string name="consejo6">"No utilices fuegos artificiales en áreas con riesgo de incendios."</string>
+    <string name="consejo7">"Si ves humo o fuego en la naturaleza, informa a las autoridades de inmediato."</string>
+    <string name="consejo8">"No dejes vidrio u objetos que puedan crear un efecto lupa al sol."</string>
+    <string name="consejo9">"Respeta las restricciones de acceso a áreas naturales durante épocas de alto riesgo de incendio."</string>
+    <string name="consejo10">"Practica un comportamiento responsable al acampar, evitando situaciones que puedan desencadenar un incendio."</string>  
 </resources>

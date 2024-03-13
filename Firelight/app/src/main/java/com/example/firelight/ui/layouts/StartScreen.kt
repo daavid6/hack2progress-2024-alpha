@@ -27,6 +27,7 @@ import com.example.firelight.R
 @Composable
 fun StartScreen(
     modifier: Modifier = Modifier,
+    helpText: Int = R.string.consejo1,
     onLayoutButton: () -> Unit
 ) {
     Surface(
@@ -69,7 +70,7 @@ fun StartScreen(
             )
 
             Text(
-                text ="Manten los fosforos y encendedores fuera del alcance de los niños.",
+                text = stringResource(helpText),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
