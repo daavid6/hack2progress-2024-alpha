@@ -35,7 +35,7 @@ fun FormScreen(
     ) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(32.dp, 32.dp, 32.dp, 48.dp)
         ){

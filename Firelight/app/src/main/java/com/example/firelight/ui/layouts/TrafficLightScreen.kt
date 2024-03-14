@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,87 +36,91 @@ fun TrafficLightScreen(
     onCambiarUbicionButton: () -> Unit,
     onAlertButton: () -> Unit
 ) {
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Surface(
+        color = colorResource(R.color.grisFondo),
         modifier = modifier
-            .padding(32.dp,32.dp, 32.dp, 48.dp)
     ) {
-
-        Row (
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .weight(0.10F)
-        ){
+                .padding(32.dp,32.dp, 32.dp, 48.dp)
+        ) {
+
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .fillMaxWidth()
                     .weight(0.10F)
             ) {
-                Text(
-                    text = address,
-                    fontSize = 20.sp,
-                    color = colorResource(id = R.color.grisSemaforo),
-                    fontWeight = FontWeight.Bold
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(0.10F)
+                ) {
+                    Text(
+                        text = address,
+                        fontSize = 20.sp,
+                        color = colorResource(id = R.color.grisSemaforo),
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.firealert),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(colorResource(id = R.color.grisSemaforo)),
+                        modifier = Modifier
+                            .size(50.dp)
+                            .clickable(onClick = onAlertButton)
+                    )
+                }
+            }
+
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .weight(0.75F)
+                    .zIndex(-1f) // Esto enviará el Box al fondo
+            ) {
+                //Palo
+                Image(
+                    alignment = Alignment.Center,
+                    painter = painterResource(R.drawable.palo),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(800.dp)
+                        .align(Alignment.TopCenter)
+                        .offset(y = (-200).dp)
                 )
 
+                //Semaforo
                 Image(
-                    painter = painterResource(id = R.drawable.firealert),
+                    alignment = Alignment.Center,
+                    painter = painterResource(R.drawable.semaforoon),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(colorResource(id = R.color.grisSemaforo)),
+                    contentScale = ContentScale.Inside
+                )
+
+
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .weight(0.15F)
+            ) {
+                Spacer(modifier = Modifier.weight(0.5F))
+
+                MainButton(
+                    idButtonColor = R.color.grisBotones,
+                    text = "Cambiar ubicacion",
+                    onClick = onCambiarUbicionButton,
                     modifier = Modifier
-                        .size(50.dp)
-                        .clickable(onClick = onAlertButton)
+                        .fillMaxSize()
+                        .weight(0.5F)
+
                 )
             }
-        }
-
-        Box (
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .weight(0.75F)
-                .zIndex(-1f) // Esto enviará el Box al fondo
-        ) {
-            //Palo
-            Image(
-                alignment = Alignment.Center,
-                painter = painterResource(R.drawable.palo),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(800.dp)
-                    .align(Alignment.TopCenter)
-                    .offset(y = (-200).dp)
-            )
-
-            //Semaforo
-            Image(
-                alignment = Alignment.Center,
-                painter = painterResource(R.drawable.semaforoon),
-                contentDescription = null,
-                contentScale = ContentScale.Inside
-            )
-
-
-        }
-
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .weight(0.15F)
-        ) {
-            Spacer(modifier = Modifier.weight(0.5F))
-
-            MainButton(
-                idButtonColor = R.color.grisBotones,
-                text = "Cambiar ubicacion",
-                onClick = onCambiarUbicionButton,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.5F)
-
-            )
         }
     }
 }

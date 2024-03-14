@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="grisFondo">#ffbfbfbf</color>
+    <color name="grisFondo">#D5D5D5</color>
     <color name="grisSemaforo">#ff333338</color>
     <color name="grisBotones">#ff808080</color>
     <color name="rojoFondo">#FFFF7E7E</color>
