@@ -51,25 +51,38 @@ android {
 
 dependencies {
 
-    val navVersion = "2.7.7"
-
     // Java language implementation
-    implementation("androidx.navigation:navigation-fragment:$navVersion")
-    implementation("androidx.navigation:navigation-ui:$navVersion")
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
     // Kotlin
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     // Feature module Support
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:$navVersion")
+    implementation(libs.androidx.navigation.dynamic.features.fragment)
 
     // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
+    androidTestImplementation(libs.androidx.navigation.testing)
 
     // Jetpack Compose Integration
-    implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation(libs.androidx.navigation.compose)
 
+
+    //Retrofit for the API management
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.gson)
+
+    //Location of Client
+    implementation(libs.play.services.location)
+
+    //Network image??
+    implementation(libs.coil.compose)
+
+    //Layout Without status bar
+    implementation(libs.accompanist.systemuicontroller)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
