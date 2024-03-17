@@ -5,11 +5,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.firelight.data.ServiciosLocalicacion
+import com.example.firelight.model.weather.MyLatLng
 import com.example.firelight.ui.FirelightViewModel
 import com.example.firelight.ui.layouts.AlertScreen
 import com.example.firelight.ui.layouts.FormScreen
@@ -48,6 +53,9 @@ fun FirelightApp(
         }
 
         composable(route = FirelightScreen.TrafficLight.name) {
+
+            ServiciosLocalicacion.getLocationName(coordenadas = MyLatLng(0.0, 0.0))
+
             TrafficLightScreen(
                 address = uiState.address,
                 onCambiarUbicionButton = { navController.navigate(FirelightScreen.Form.name) },

@@ -12,6 +12,8 @@ interface IApiService {
         @Query("lon") lon: Double = 0.0,
         @Query("units") units: String = "metric",
         @Query("appid") appId: String = OPEN_WEATHER_MAP_API_KEY,
+        @Query("exclude") exclude: String = "minutely,hourly,daily,alerts,hourly",
+        @Query("lang") lang: String = "es"
     ): ValidData // WeatherResult
 
     @GET("weather")

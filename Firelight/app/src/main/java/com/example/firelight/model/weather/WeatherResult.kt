@@ -9,7 +9,6 @@ data class WeatherResult(
     @SerializedName("main") var main: Main? = Main(), //All about tempeatures
     @SerializedName("visibility") var visibility: Int? = null, //Number of visibility
     @SerializedName("wind") var wind: Wind? = Wind(), //Speed and orientation(degrees)
-    @SerializedName("clouds") var clouds: Clouds? = Clouds(), //% of clouds (???)
     @SerializedName("dt") var dt: String? = null, //datetime
     @SerializedName("sys") var sys: Sys? = Sys(), //Sun info
     @SerializedName("timezone") var timezone: Int? = null, //Usage?
