@@ -1,25 +1,25 @@
 package com.example.firelight.network
 
 import com.example.firelight.constants.Const.Companion.OPEN_WEATHER_MAP_API_KEY
-import com.example.firelight.model.weather.ValidData
+import com.example.firelight.model.weather.DataResult
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface IApiService {
     @GET("weather")
-    suspend fun getWeather(
-        @Query("lat") lat: Double = 0.0,
-        @Query("lon") lon: Double = 0.0,
+    suspend fun getWeatherByCoord(
+        @Query("lat") lat: Double = 43.46472,
+        @Query("lon") lon: Double = -3.80444,
         @Query("units") units: String = "metric",
         @Query("appid") appId: String = OPEN_WEATHER_MAP_API_KEY,
         @Query("exclude") exclude: String = "minutely,hourly,daily,alerts,hourly",
         @Query("lang") lang: String = "es"
-    ): ValidData // WeatherResult
+    ): DataResult
 
     @GET("weather")
-    suspend fun getWeather(
+    suspend fun getWeatherByCity(
         @Query("q") city: String = "metric",
         @Query("units") units: String = "metric",
         @Query("appid") appId: String = OPEN_WEATHER_MAP_API_KEY,
-    ): ValidData //WeatherResult
+    ): DataResult
 }

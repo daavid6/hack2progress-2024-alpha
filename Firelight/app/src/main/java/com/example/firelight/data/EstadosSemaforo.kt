@@ -1,9 +1,9 @@
 package com.example.firelight.data
 
-enum class EstadosSemaforo {
-    VERDE,
-    AMBAR,
-    ROJO;
+enum class EstadosSemaforo(name: String) {
+    VERDE("Verde"),
+    AMBAR("Ambar"),
+    ROJO("Rojo");
 
     companion object {
         fun obtenColorSemaforo(riesgo: Double): EstadosSemaforo? {

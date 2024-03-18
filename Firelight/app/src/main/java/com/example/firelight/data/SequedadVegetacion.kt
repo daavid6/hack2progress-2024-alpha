@@ -8,7 +8,6 @@ enum class SequedadVegetacion {
     HUMEDO,
     MUYHUMEDO;
 
-
     companion object {
         fun sequedadRandom(): SequedadVegetacion {
             val values = SequedadVegetacion.entries.toTypedArray()

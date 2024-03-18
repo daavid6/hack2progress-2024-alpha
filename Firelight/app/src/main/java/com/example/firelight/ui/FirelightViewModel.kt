@@ -1,23 +1,23 @@
 package com.example.firelight.ui
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.annotation.StringRes
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.firelight.model.weather.MyLatLng
-import com.example.firelight.network.RetrofitClient
 import com.example.firelight.R
 import com.example.firelight.data.FirelightUiState
-import com.example.firelight.model.weather.ValidData
-import com.example.firelight.model.weather.WeatherResult
+import com.example.firelight.model.weather.Coordenadas
+import com.example.firelight.network.RetrofitClient
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-enum class STATE {
+enum class State {
     LOADING,
     SUCCESS,
     FAILED
@@ -27,56 +27,53 @@ class FirelightViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(FirelightUiState())
     val uiState: StateFlow<FirelightUiState> = _uiState.asStateFlow()
 
-    //Hold value from API for weather info
-    var weatherResponse : WeatherResult by mutableStateOf(WeatherResult())
-    var state by mutableStateOf(STATE.LOADING) //Control state of view model
-    var dataResponse : ValidData by mutableStateOf(ValidData())
-
-    var errorMsg: String by mutableStateOf("")
-    /*
-      fun getWeatherByLocation(latLng: MyLatLng) {
-          viewModelScope.launch {
-              state = STATE.LOADING
-              val apiService = RetrofitClient.getInstance()
-              try {
-                  val apiResponse = apiService.getWeather(latLng.lat, latLng.lng)
-                  weatherResponse = apiResponse //Update state
-                  state = STATE.SUCCESS
-              } catch (e: Exception) {
-                  errorMsg = e.message!!.toString()
-                  state = STATE.FAILED
-              }
-          }
-      }
-          */
-    fun getWeatherByLocation(latLng: MyLatLng) {
+    fun getWeatherByLocation(coordenadas: Coordenadas) {
         viewModelScope.launch {
-            state = STATE.LOADING
+            _uiState.value = _uiState.value.copy(state = State.LOADING)
             val apiService = RetrofitClient.getInstance()
             try {
-                val apiResponse = apiService.getWeather(latLng.lat, latLng.lng)
-                dataResponse = apiResponse //Update state
-                state = STATE.SUCCESS
+                val apiResponse = apiService.getWeatherByCoord(coordenadas.latitud, coordenadas.longitud)
+
+                _uiState.value = _uiState.value.copy(state = State.SUCCESS, dataResponse = apiResponse)
             } catch (e: Exception) {
-                errorMsg = e.message!!.toString()
-                state = STATE.FAILED
+                _uiState.value = _uiState.value.copy(state = State.FAILED)
             }
         }
     }
 
-    fun getWeatherByCity(city: String) {
+    fun getWeatherByLocation(city: String) {
         viewModelScope.launch {
-            state = STATE.LOADING
+            _uiState.value = _uiState.value.copy(state = State.LOADING)
             val apiService = RetrofitClient.getInstance()
             try {
-                val apiResponse = apiService.getWeather(city)
-                dataResponse = apiResponse
-                state = STATE.SUCCESS
+                val apiResponse = apiService.getWeatherByCity(city)
+
+                _uiState.value = _uiState.value.copy(state = State.SUCCESS, dataResponse = apiResponse)
             } catch (e: Exception) {
-                errorMsg = e.message!!.toString()
-                state = STATE.FAILED
+                _uiState.value = _uiState.value.copy(state = State.FAILED)
             }
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun initLocationClient(context: Context): Coordenadas {
+
+        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+
+        _uiState.value = _uiState.value.copy(fusedLocationProviderClient = fusedLocationProviderClient)
+
+        return Coordenadas(
+            latitud = fusedLocationProviderClient.lastLocation.result.latitude,
+            longitud = fusedLocationProviderClient.lastLocation.result.longitude
+        )
+    }
+
+    fun removeLocationUpdates(locationCallback: LocationCallback) {
+        _uiState.value.fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
+    }
+
+    fun startLocationUpdate() {
+        _uiState.value = _uiState.value.copy(locationRequired = true)
     }
 
     fun randomKnowledge(): Int {
@@ -100,4 +97,6 @@ class FirelightViewModel : ViewModel() {
 
         return randomNumber
     }
+
+
 }

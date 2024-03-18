@@ -1,43 +1,38 @@
 package com.example.firelight.data
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import com.example.firelight.model.weather.MyLatLng
-import com.example.firelight.ui.STATE
+import com.example.firelight.constants.Const
+import com.example.firelight.model.weather.Coordenadas
+import com.example.firelight.model.weather.MyData
+import com.example.firelight.ui.FirelightViewModel
+import com.example.firelight.ui.State
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.coroutineScope
-import android.location.Geocoder
+import com.google.android.gms.location.Priority
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.util.Locale
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.coroutineScope
 import java.net.URL
 
 class ServiciosLocalicacion {
@@ -46,19 +41,17 @@ class ServiciosLocalicacion {
         val results: List<String>
     )
 
-
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
-    fun initLocationClient(context: Context) {
-        this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-    }
+    private val permissions = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
 
 
     companion object {
-        fun getLocationName(coordenadas: MyLatLng): String {
-            val apiKeyGeocodiing = "YOUR_API_KEY" // Replace with your actual API key
+        fun getLocationName(coordenadas: Coordenadas): String {
+            val apiKeyGeocodiing = Const.OPEN_WEATHER_MAP_API_KEY // Replace with your actual API key
             val response =
-                URL("https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordenadas.lat},${coordenadas.lng}&key=$apiKeyGeocodiing").readText()
+                URL("https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordenadas.latitud},${coordenadas.longitud}&key=$apiKeyGeocodiing").readText()
 
             // Parse the response with Gson
             val geocodingResponse = Gson().fromJson(response, GeocodingResponse::class.java)
@@ -72,8 +65,11 @@ class ServiciosLocalicacion {
         }
     }
 
+
     @Composable
-    private fun LocationScreen(currentLocation: MyLatLng) {
+    private fun LocationScreen(currentLocation: Coordenadas, viewModel: FirelightViewModel, context: Context) {
+
+        val uiState by viewModel.uiState.collectAsState()
 
         //Request runtime permission
         val launcherMultiplePermissions = rememberLauncherForActivityResult(
@@ -84,11 +80,11 @@ class ServiciosLocalicacion {
             }
             //Check all permission is acept
             if(areGrated){
-                locationRequired = true;
+                uiState.locationRequired = true;
                 startLocationUpdate();
-                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -103,9 +99,7 @@ class ServiciosLocalicacion {
 
         LaunchedEffect(key1 = currentLocation, block = {
             coroutineScope {
-                if (permissions.all{
-                        ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-                    }) {
+                if (permissions.all{ permission -> ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED }) {
                     //All permissions accepted
                     startLocationUpdate()
                 }
@@ -115,53 +109,61 @@ class ServiciosLocalicacion {
             }
         })
 
-        //Esta parte cambiar con lo de david, importante como coge la info de la api
-        val gradient = Brush.linearGradient(
-            colors = listOf(Color.White, Color.Blue),
-            start = Offset(1000f, -1000f),
-            end = Offset(000f, -1000f)
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(gradient)
-        ) {
-            val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-            val marginTop = screenHeight * 0.2f //Margen de 20%
-            val marginTopPx = with(LocalDensity.current) {marginTop.toPx()}
-
-            Column (
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .layout { measurable, constraints ->
-                        val placeable = measurable.measure(constraints)
-
-                        //Define layout
-                        layout(
-                            placeable.width,
-                            placeable.height + marginTopPx.toInt()
-                        ) {
-                            placeable.placeRelative(0, marginTopPx.toInt())
-                        }
-                    },
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if (mainViewModel.state == STATE.LOADING) {
-                    LoadingSection()
-                }
-                else if(mainViewModel.state == STATE.FAILED) {
-                    ErrorSection(mainViewModel.errorMsg)
-                }
-                else {
-                    WeatherSection(mainViewModel.dataResponse)
-                }
-            }
+        when (uiState.state) {
+            State.LOADING -> { LoadingSection() }
+            State.FAILED -> { ErrorSection() }
+            else -> { WeatherSection(uiState.dataResponse.toMyData()) }
         }
+    }
 
 
-        //Text(text = "${currentLocation.lat}/${currentLocation.lng}")
+
+
+    @Composable
+    private fun WeatherSection(dataExtracted: MyData?) {
+        return Column {
+            if (dataExtracted == null) {
+                ErrorSection()
+                return
+            }
+
+            val riesgo = Riesgos.riesgoActual(
+                temperatura = dataExtracted.temp,
+                viento = dataExtracted.windSpeed,
+                humedad = dataExtracted.humidity,
+                sequedad = SequedadVegetacion.sequedadRandom()
+            )
+
+            val colorSemaforo = EstadosSemaforo.obtenColorSemaforo(riesgo)
+
+            if (colorSemaforo == null) {
+                ErrorSection()
+                return
+            }
+
+            Text(
+                fontSize = 60.sp,
+                text = colorSemaforo.name
+            )
+            Text(
+                fontSize = 30.sp,
+                text = dataExtracted.toString()
+            )
+        }
+    }
+
+    @Composable
+    private fun ErrorSection() {
+        return Column {
+            Text(text = "Error", color = Color.White)
+        }
+    }
+
+    @Composable
+    private fun LoadingSection() {
+        return Column {
+            CircularProgressIndicator(color = Color.White )
+        }
     }
 }
 

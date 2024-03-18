@@ -4,7 +4,6 @@ class Riesgos {
 
     companion object {
         fun riesgoActual(temperatura: Double, viento: Double, humedad: Double, sequedad: SequedadVegetacion): Double {
-
             val t = riesgoTemperatura(temperatura) * (1/3.5)
             val v = riesgoViento(viento) * (1/2)
             val h = riesgoHumedad(humedad) * (1/3)
