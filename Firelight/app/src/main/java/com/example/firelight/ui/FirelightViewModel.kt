@@ -7,12 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.firelight.R
 import com.example.firelight.data.FirelightUiState
+import com.example.firelight.data.ServiciosLocalicacion
 import com.example.firelight.model.weather.Coordenadas
 import com.example.firelight.network.RetrofitClient
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -62,23 +59,25 @@ class FirelightViewModel : ViewModel() {
 
         val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
-        _uiState.value = _uiState.value.copy(fusedLocationProviderClient = fusedLocationProviderClient)
-
-        return Coordenadas(
+        val coordenadas = Coordenadas(
             latitud = fusedLocationProviderClient.lastLocation.result.latitude,
             longitud = fusedLocationProviderClient.lastLocation.result.longitude
         )
-    }
 
+        _uiState.value = _uiState.value.copy(fusedLocationProviderClient = fusedLocationProviderClient, currentLocation = coordenadas)
+
+        return coordenadas
+    }
+/*
     fun removeLocationUpdates(locationCallback: LocationCallback) {
         _uiState.value.fusedLocationProviderClient?.removeLocationUpdates(locationCallback)
     }
-
+*/
     fun startLocationUpdate() {
         _uiState.value = _uiState.value.copy(locationRequired = true)
     }
 
-    fun updateLocation() {
+/*    fun updateLocation() {
         object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
@@ -88,7 +87,16 @@ class FirelightViewModel : ViewModel() {
             }
         }
     }
+*/
+    fun getAddresses(): String {
+        val address = ServiciosLocalicacion.getLocationName(coordenadas = uiState.value.currentLocation)
 
+        _uiState.value = _uiState.value.copy(address = address)
+
+        return address
+    }
+
+/*
     private fun fetchWeatherInformation(mainViewModel: FirelightViewModel, city: String) {
         _uiState.value = _uiState.value.copy(state = State.LOADING)
         mainViewModel.getWeatherByLocation(city)
@@ -100,7 +108,7 @@ class FirelightViewModel : ViewModel() {
         mainViewModel.getWeatherByLocation(currentLocation)
         _uiState.value = _uiState.value.copy(state = State.SUCCESS)
     }
-
+*/
 
     fun randomKnowledge(): Int {
         val num = 1..9
@@ -123,6 +131,4 @@ class FirelightViewModel : ViewModel() {
 
         return randomNumber
     }
-
-
 }

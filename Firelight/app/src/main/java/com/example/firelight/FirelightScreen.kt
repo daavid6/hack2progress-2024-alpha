@@ -1,20 +1,15 @@
 package com.example.firelight
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.firelight.data.ServiciosLocalicacion
-import com.example.firelight.model.weather.Coordenadas
 import com.example.firelight.ui.FirelightViewModel
 import com.example.firelight.ui.layouts.AlertScreen
 import com.example.firelight.ui.layouts.FormScreen
@@ -36,18 +31,10 @@ fun FirelightApp(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    val context = LocalContext.current
-
-
     /*Inintialize the viewModel and other values*/
     viewModel.randomKnowledge()
-    val coordenadas: Coordenadas = viewModel.initLocationClient(context)
-    viewModel.getWeatherByLocation(coordenadas)
-    ServiciosLocalicacion.getLocationName(coordenadas = Coordenadas(0.0, 0.0))
-
-
-
-
+    viewModel.getWeatherByLocation(uiState.currentLocation)
+    viewModel.getAddresses()
 
     NavHost(
         navController = navController,

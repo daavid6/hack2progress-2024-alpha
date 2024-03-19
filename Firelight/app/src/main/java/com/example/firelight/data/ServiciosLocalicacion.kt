@@ -1,38 +1,8 @@
 package com.example.firelight.data
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Looper
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import com.example.firelight.constants.Const
 import com.example.firelight.model.weather.Coordenadas
-import com.example.firelight.model.weather.MyData
-import com.example.firelight.ui.FirelightViewModel
-import com.example.firelight.ui.State
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.gson.Gson
-import kotlinx.coroutines.coroutineScope
 import java.net.URL
 
 class ServiciosLocalicacion {
@@ -41,10 +11,7 @@ class ServiciosLocalicacion {
         val results: List<String>
     )
 
-    private val permissions = arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    )
+
 
 
     companion object {
@@ -65,6 +32,11 @@ class ServiciosLocalicacion {
         }
     }
 
+/*
+    private val permissions = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
 
     @Composable
     private fun LocationScreen(currentLocation: Coordenadas, viewModel: FirelightViewModel, context: Context) {
@@ -80,8 +52,8 @@ class ServiciosLocalicacion {
             }
             //Check all permission is acept
             if(areGrated){
-                uiState.locationRequired = true;
-                viewModel.startLocationUpdate();
+                uiState.locationRequired = true
+                viewModel.startLocationUpdate()
                 Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
@@ -165,6 +137,8 @@ class ServiciosLocalicacion {
             CircularProgressIndicator(color = Color.White )
         }
     }
+
+*/
 }
 
 

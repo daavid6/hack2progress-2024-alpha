@@ -6,7 +6,6 @@ import com.example.firelight.model.weather.Coordenadas
 import com.example.firelight.model.weather.DataResult
 import com.example.firelight.ui.State
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
 
 data class FirelightUiState(
     @StringRes var knowledge: Int = R.string.consejo1,
