@@ -11,6 +11,8 @@ import com.example.firelight.model.weather.Coordenadas
 import com.example.firelight.network.RetrofitClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -75,6 +77,30 @@ class FirelightViewModel : ViewModel() {
     fun startLocationUpdate() {
         _uiState.value = _uiState.value.copy(locationRequired = true)
     }
+
+    fun updateLocation() {
+        object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                super.onLocationResult(p0)
+                for (location in p0.locations) {
+                    _uiState.value = _uiState.value.copy(currentLocation = Coordenadas(location.latitude, location.longitude))
+                }
+            }
+        }
+    }
+
+    private fun fetchWeatherInformation(mainViewModel: FirelightViewModel, city: String) {
+        _uiState.value = _uiState.value.copy(state = State.LOADING)
+        mainViewModel.getWeatherByLocation(city)
+        _uiState.value = _uiState.value.copy(state = State.SUCCESS)
+    }
+
+    private fun fetchWeatherInformation(mainViewModel: FirelightViewModel, currentLocation: Coordenadas) {
+        _uiState.value = _uiState.value.copy(state = State.LOADING)
+        mainViewModel.getWeatherByLocation(currentLocation)
+        _uiState.value = _uiState.value.copy(state = State.SUCCESS)
+    }
+
 
     fun randomKnowledge(): Int {
         val num = 1..9

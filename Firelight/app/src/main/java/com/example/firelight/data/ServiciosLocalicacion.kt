@@ -81,7 +81,7 @@ class ServiciosLocalicacion {
             //Check all permission is acept
             if(areGrated){
                 uiState.locationRequired = true;
-                startLocationUpdate();
+                viewModel.startLocationUpdate();
                 Toast.makeText(context, "Permission Granted", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(context, "Permission Denied", Toast.LENGTH_LONG).show()
@@ -101,7 +101,7 @@ class ServiciosLocalicacion {
             coroutineScope {
                 if (permissions.all{ permission -> ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED }) {
                     //All permissions accepted
-                    startLocationUpdate()
+                    viewModel.startLocationUpdate()
                 }
                 else {
                     launcherMultiplePermissions.launch(permissions)
